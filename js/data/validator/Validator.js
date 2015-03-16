@@ -5,19 +5,25 @@ define(['js/core/Bindable', 'js/core/Base'], function (Bindable, Base) {
         $validatorCache: {},
 
         defaults: {
-            /***
-             * the field of the entity to validate
-             * @type {string}
+
+            /**
+             * The field of the entity to validate.
+             *
+             * @type {String}
              */
             field: null,
-            /***
-             * the error code for this validation error
-             * @type {number}
+
+            /**
+             * The error code for this validation error.
+             *
+             * @type {Number}
              */
             errorCode: 'isInvalid',
-            /***
-             * the error message displayed for the user
-             * @type {string}
+
+            /**
+             * The error message displayed for the user.
+             *
+             * @type {String}
              */
             errorMessage: null
         },
@@ -33,11 +39,17 @@ define(['js/core/Bindable', 'js/core/Base'], function (Bindable, Base) {
             return this.$validatorCache[cacheKey];
         },
 
+        /**
+         * Returns a generated cache key.
+         *
+         * @returns {*}
+         * @private
+         */
         _generateCacheKey: function () {
             return null;
         },
 
-        /***
+        /**
          * Validates an entity asynchronously. The validation error is returned as the second parameter of the callback
          *
          * @param {js.data.Entity} entity
@@ -62,7 +74,7 @@ define(['js/core/Bindable', 'js/core/Base'], function (Bindable, Base) {
 
             try {
                 internalCallback(null, this._validate(entity, options));
-            } catch(e) {
+            } catch (e) {
                 internalCallback(e);
             }
 
@@ -78,20 +90,24 @@ define(['js/core/Bindable', 'js/core/Base'], function (Bindable, Base) {
             }
         },
 
-        /***
+        /**
          * Returns true if entity has the field set or the field is required
+         *
          * @param {js.data.Entity} entity
-         * @returns {boolean}
+         *
+         * @returns {Boolean}
          * @private
          */
-        _validationRequired: function(entity) {
+        _validationRequired: function (entity) {
             return !(this.$.field && !entity.schema[this.$.field].required && !entity.getTransformedValue(this.$.field));
         },
 
-        /***
-         * performs a synchronous validation
+        /**
+         * Performs a synchronous validation.
+         *
          * @param {js.data.Entity} entity
-         * @param options
+         * @param {Object} [options]
+         *
          * @abstract
          * @private
          */
@@ -99,32 +115,43 @@ define(['js/core/Bindable', 'js/core/Base'], function (Bindable, Base) {
             throw new Error("abstract method _validate from Validator");
         },
 
+        /**
+         * Returns an occurred error message.
+         *
+         * @returns {?String}
+         * @private
+         */
         _getErrorMessage: function () {
             if (this.$.field) {
-                return  (this.$.errorMessage || "Field '%' is invalid").replace('%', this.$.field);
+                return (this.$.errorMessage || "Field '%' is invalid").replace('%', this.$.field);
             } else {
                 return this.$.errorMessage || "Entity is invalid";
             }
         },
-        /***
-         * Creates an Validation Error object with a code, message and a field
-         * @param {number} code
-         * @param {string} message
-         * @param {string} field
+
+        /**
+         * Creates a validation error object with a code, message and a field
+         *
+         * @param {Number|String} code
+         * @param {String} message
+         * @param {String} field
+         *
          * @returns {js.data.validator.Validator.Error}
          * @private
          */
-        _createError: function(code, message, field){
+        _createError: function (code, message, field) {
             return new Validator.Error({
                 code: code,
                 message: message,
                 field: field
             });
         },
-        /***
+
+        /**
          * Create a field error
          *
-         * @param {string} [field] - the field
+         * @param {String} [field] - the field
+         *
          * @returns {js.data.validator.Validator.Error} an error instance
          * @private
          */
@@ -134,8 +161,7 @@ define(['js/core/Bindable', 'js/core/Base'], function (Bindable, Base) {
 
     });
 
-    Validator.Error = Bindable.inherit({
-    });
+    Validator.Error = Bindable.inherit({});
 
     return Validator;
 })
